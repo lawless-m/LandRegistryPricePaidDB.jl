@@ -56,7 +56,7 @@ function read_csvs(datadir=DATADIR)
                     transform!(_, [
                         :date_t => ByRow(t->date(t)) => :date,
                         :price_t => ByRow(t->int(t)) => :price,
-                        [:postcode, :paon, :saon, :street] => ByRow((a,b,c,d)->hash((a,b,c,d))) => :address_hash) 
+                        [:postcode, :paon, :saon, :street] => ByRow((a,b,c,d)->hash((a,b,c,d))) => :address_hash
                     ]) |>
                     select!(_, Not([:TUID, :date_t, :price_t]))
     end
