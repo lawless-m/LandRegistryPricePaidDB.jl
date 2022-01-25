@@ -51,6 +51,7 @@ function read_csvs(datadir=DATADIR)
 
     Threads.@threads for i in 1:length(files)
         dfs[i] = @pipe CSV.read(files[i], DataFrame; header_t, types=String) |>
+                    filter!(row->row.propertyType != "O", _) |>
                     transform!(_, [
                         :date => ByRow(t->date(t)) => :date_t,
                         :price => ByRow(t->int(t)) => :price_t,
@@ -124,7 +125,7 @@ grep -v address_hash landreg_hashed.csv |
     
 some have no postscodes
 
-awk ' BEGIN { FS="," } $4 != "" { gsub(/-.*/, "", $2); print $4","$2","$3 }' landreg_sorted_uniq.csv | sort > pc_year_price.csv
+awk ' BEGIN { FS="," } $5 == "O" { next } $4 != "" { gsub(/-.*/, "", $2); print $4","$2","$3 }' landreg_sorted_uniq.csv | sort > landreg_pc_year_price.csv
 ==#
 
 
