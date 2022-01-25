@@ -132,16 +132,13 @@ function postcode_to_UInt64(pc)
     if ismissing(pc)
         return 0
     end
-    try 
-        m = match(r"([A-Z]+)([0-9]+([A-Z]+)?) ?([0-9]+)([A-Z]+)", replace(pc, " "=>""))
-        if m == nothing || m[1] === nothing || m[2] === nothing || m[4] === nothing || m[5] === nothing
-            return 0
-        end
-        reduce((a,c) -> UInt64(a) << 8 + UInt8(c), collect(lpad(m[1], 2) * lpad(m[2], 2) * m[4] * m[5]), init=0)
-    catch
-        println(stderr, "Error for pc: $pc")
+    
+    m = match(r"([A-Z]+)([0-9]+([A-Z]+)?) ?([0-9]+)([A-Z]+)", replace(pc, " "=>""))
+    if m == nothing || m[1] === nothing || m[2] === nothing || m[4] === nothing || m[5] === nothing
+        return 0
     end
-    return 0
+    reduce((a,c) -> UInt64(a) << 8 + UInt8(c), collect(lpad(m[1], 2) * lpad(m[2], 2) * m[4] * m[5]), init=0)
+
 end
 
 function UInt64_to_postcode(u)
