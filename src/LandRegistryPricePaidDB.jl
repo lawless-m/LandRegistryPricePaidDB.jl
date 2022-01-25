@@ -16,7 +16,7 @@ const NEWESTDIR = joinpath(LANDREGDIR, "newest_per_address")
 const TDATADIR = joinpath(LANDREGDIR, "test")
 const mask = 0x00ffffffffffffff
 
-export csv_files, postcode_to_UInt64, create_kvs
+export csv_files, postcode_to_UInt64, create_kvs, load_postcode_price_index, load_postcode_csv, prices_for_postcode
 
 #==
     see https://www.gov.uk/guidance/about-the-price-paid-data#explanations-of-column-headers-in-the-ppd
@@ -204,6 +204,10 @@ function prices_for_postcode(idx, pcode, csvio::IO)
         return CSV.File(csvio; header=["postcode", "year", "price"], limit=lines)
     end
 end
+
+load_postcode_price_index(idxfile=joinpath(LR.LANDREGDIR, "Postcode_Year_Price.index")) = open_index(idxfile)
+
+load_postcode_csv(csvfile=joinpath(LR.LANDREGDIR, "landreg_pc_year_price.csv")) = open(csvfile, "r")
 
 #####
 end
